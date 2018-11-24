@@ -1,14 +1,8 @@
-import json
-
-import dateutil.parser
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship, reconstructor
-
-import requests
+from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy.orm import reconstructor
 
 from dih.database import Base
 
-# voucher_time = timedelta(hours=2)
 
 class User(Base):
     __tablename__ = 'users'
