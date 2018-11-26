@@ -1,6 +1,7 @@
 import os
 
 from sqlalchemy import create_engine
+from sqlalchemy import exc
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -17,9 +18,13 @@ def init_db():
     # you will have to import them first before calling init_db()
     import dih.models
     Base.metadata.create_all(bind=engine)
-    # Testing env
-    db_session.add(dih.models.VO('vo1.example.org'))
-    db_session.add(dih.models.VO('vo2.example.org'))
-    #for i in range(1, 2):
-    #    db_session.add(dih.models.VO('dih-vouchers%02d.eosc-hub.eu' % i))
-    db_session.commit()
+    # Production env
+    # vos = ['dih-vouchers%02d.eosc-hub.eu' % i for i in range(1, 31)]
+    vos = ['vo%d.example.org' % i for i in range(1, 3)]
+    for vo in vos:
+        db_session.add(dih.models.VO(name=vo))
+        try:
+            db_session.commit()
+        except exc.IntegrityError:
+            print("Not creating VO %s as it already exists" % vo)
+            pass
