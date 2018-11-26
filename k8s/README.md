@@ -14,7 +14,7 @@ stringData:
     SECRET_KEY = 'xxxx'
     CHECKIN_USER = 'yyyy'
     CHECKIN_PWD = 'gggg'
-    VOUCHER_TIME = timedelta(months=3)
+    VOUCHER_TIME = timedelta(days=90)
 ```
 
 and
