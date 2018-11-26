@@ -112,12 +112,6 @@ def enroll():
                             app.config['CHECKIN_PWD']),
                       headers={'Content-Type': 'application/json'},
                       data=json.dumps(body))
-    print("*" * 80)
-    print(json.dumps(body))
-    print("*" * 80)
-    print(r)
-    print(r.status_code)
-    print(r.text)
     r.raise_for_status()
     # update stuff once we had ok from Check-in
     vo.used = True
