@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app: dih 
+  name: dih 
+  namespace: dih 
+spec:
+  rules:
+  - host: dih-vouchers.fedcloud-tf.fedcloud.eu
+    http:
+      paths:
+      - backend:
+          serviceName: dih 
+          servicePort: 80
+        path: /
+  tls:
+  - hosts:
+    - dih-vouchers.fedcloud-tf.fedcloud.eu
+    secretName: acme-tls-dih

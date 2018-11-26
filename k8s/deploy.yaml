@@ -1,0 +1,63 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dih 
+  namespace: dih 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dih 
+    spec:
+      containers:
+      - image: enolfc/dih:latest
+        name: dih
+        ports:
+        - containerPort: 80
+        env:
+        - name: SERVER_NAME 
+          value: "dih-vouchers.fedcloud-tf.fedcloud.eu"
+        - name: CHECKIN_CLIENT_SECRET 
+          valueFrom:
+            secretKeyRef:
+              name: dih
+              key: checkin_client_secret 
+        - name: CHECKIN_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: dih
+              key: checkin_client_id
+        - name: CHECKIN_CRYPTO
+          valueFrom:
+            secretKeyRef:
+              name: dih
+              key: checkin_crypto
+        - name: CHECKIN_REDIRECT 
+          value: "https://dih-vouchers.fedcloud-tf.fedcloud.eu/oidc/redirect"
+        - name: CHECKIN_URL 
+          value: "aai-dev.egi.eu"
+        - name: DIH_DATABASE 
+          value: "sqlite:////db/dih.db"
+        - name: DIH_CONFIG
+          value: '/config/dih_config.py'
+        resources:
+          limits:
+            memory: 3000M
+          requests:
+            cpu: 200m
+            memory: 2000M
+        volumeMounts:
+        - name: config-volume
+          mountPath: "/config/"
+          readOnly: True
+        - name: db-volume
+          mountPath: "/db/"
+      volumes:
+      - name: config-volume
+        secret:
+          secretName: dih-config 
+      - name: db-volume
+        persistentVolumeClaim:
+          claimName: dih-db-dir
