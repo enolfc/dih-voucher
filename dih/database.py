@@ -19,8 +19,8 @@ def init_db():
     import dih.models
     Base.metadata.create_all(bind=engine)
     # Production env
-    # vos = ['dih-vouchers%02d.eosc-hub.eu' % i for i in range(1, 31)]
-    vos = ['vo%d.example.org' % i for i in range(1, 3)]
+    vos = ['dih-vouchers%02d.eosc-hub.eu' % i for i in range(1, 31)]
+    # vos = ['vo%d.example.org' % i for i in range(1, 3)]
     for vo in vos:
         db_session.add(dih.models.VO(name=vo))
         try:
