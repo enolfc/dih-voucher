@@ -76,12 +76,14 @@ def index():
 @app.route('/enroll')
 def enroll():
     user = get_user()
+    app.logger.debug("Got user %s" % user)
     if user.status in ['Active', 'Expired']:
         # do not try to abuse, bye!
         flash("You have already redeemed your voucher, can't get another one!")
         return redirect(url_for('index'))
     # get available VO
     vo = VO.query.filter(VO.used == False).first()
+    app.logger.debug("Got VO %s" % vo)
     if not vo:
         # no more available, bye!
         flash('There are no vouchers left! '
@@ -107,6 +109,7 @@ def enroll():
             }
         ]
     }
+    app.logger.debug("BODY: %s" % body)
     r = requests.post(app.config['CHECKIN_VO_URL'],
                       auth=(app.config['CHECKIN_USER'],
                             app.config['CHECKIN_PWD']),
