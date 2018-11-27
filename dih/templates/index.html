@@ -8,8 +8,8 @@
 
 {% if user.status == 'Active' %}
     <h3>Your voucher is active!</h3>
-    <p>You have {{ user.expiration().astimezone().replace(tzinfo=None) | humanize }} to consume the services
-    (your voucher will expire on  {{ user.expiration().strftime('%Y-%m-%d')}}).</p>
+    <p>You have {{ user.valid_through.astimezone().replace(tzinfo=None) | humanize }} to consume the services
+    (your voucher will expire on  {{ user.valid_through.strftime('%Y-%m-%d')}}).</p>
     <p>
     <a class="btn brown-eosc" style="color:#fff;" href="https://dashboard.appdb.egi.eu/vmops">Access the dashboard</a>
     </p>
