@@ -30,10 +30,12 @@ class VO(Base):
     __tablename__ = 'vos'
     id = Column(Integer, primary_key=True)
     name = Column(String(120))
+    site = Column(String(120))
     used = Column(Boolean)
 
-    def __init__(self, name=None, used=False):
+    def __init__(self, name=None, site=None, used=False):
         self.name = name
+        self.site = site 
         self.used = used 
 
     def __repr__(self):

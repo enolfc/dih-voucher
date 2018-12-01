@@ -1,3 +1,4 @@
+import itertools
 import os
 
 from sqlalchemy import create_engine
@@ -19,10 +20,13 @@ def init_db():
     import dih.models
     Base.metadata.create_all(bind=engine)
     # Production env
-    vos = ['dih-vouchers%02d.eosc-hub.eu' % i for i in range(1, 31)]
+    vos_bari = [{'name': 'dih-voucher%02d.eosc-hub.eu' % i,
+                 'site': 'recas-bari'} for i in range(1, 23)]
+    vos_cesga = [{'name': 'dih-voucher%02d.eosc-hub.eu' % i,
+                  'site': 'cesga'} for i in range(22, 31)]
     # vos = ['vo%d.example.org' % i for i in range(1, 3)]
-    for vo in vos:
-        db_session.add(dih.models.VO(name=vo))
+    for vo in itertools.chain(vos_bari, vos_cesga):
+        db_session.add(dih.models.VO(**vo))
         try:
             db_session.commit()
         except exc.IntegrityError:
