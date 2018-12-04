@@ -40,6 +40,7 @@ def get_user():
         'email': env.get('HTTP_OIDC_EMAIL'),
         'name': env.get('HTTP_OIDC_NAME'),
     }
+    vo = None
     user = User.query.filter(User.epuid == env_user['epuid']).first()
     if not user:
         user = User(**env_user)
@@ -56,6 +57,7 @@ def get_user():
         # We default to expired...
         user.status = 'Expired'
         for vos in user_vos:
+            app.logger.debug("VO: %s" % vos)
             status = vos['status']
             now = datetime.now(timezone.utc)
             valid_from = dateutil.parser.parse(vos['valid_from'])
@@ -64,30 +66,31 @@ def get_user():
                 if now >= valid_from and now <= valid_through:
                     user.valid_through = valid_through
                     user.status = status
-    return user
+                    vo = VO.query.filter(VO.name == vos['vo_id']).first()
+    return user, vo
 
 
 @app.route('/')
 def index():
-    user = get_user()
-    return render_template('index.html', user=user)
+    user, vo = get_user()
+    return render_template('index.html', user=user, vo=vo)
 
 
 @app.route('/enroll')
 def enroll():
-    user = get_user()
+    user, vo = get_user()
     app.logger.debug("Got user %s" % user)
     if user.status in ['Active', 'Expired']:
         # do not try to abuse, bye!
-        flash("You have already redeemed your voucher, can't get another one!")
+        flash("You have already redeemed your voucher, can't get another one!", 'danger')
         return redirect(url_for('index'))
     # get available VO
     vo = VO.query.filter(VO.used == False).first()
     app.logger.debug("Got VO %s" % vo)
     if not vo:
         # no more available, bye!
-        flash('There are no vouchers left! '
-              'Stay tuned for upcoming promotions!')
+        flash(('There are no vouchers left! '
+              'Stay tuned for upcoming promotions!'), 'warning')
         return redirect(url_for('index'))
     # Enrolling the user in the VO
     now = datetime.now(timezone.utc)
@@ -119,5 +122,5 @@ def enroll():
     # update stuff once we had ok from Check-in
     vo.used = True
     db_session.commit()
-    flash('Your voucher is now active!')
+    flash('Your voucher is now active!', 'success')
     return redirect(url_for('index'))

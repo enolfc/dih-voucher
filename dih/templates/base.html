@@ -3,9 +3,9 @@
 <head>
   <link rel="profile" href="http://www.w3.org/1999/xhtml/vocab" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>EOSC-DIH industry vouchers</title>
+  <title>EOSC DIH free trials</title>
   <link rel="shortcut icon" href="https://www.eosc-hub.eu/sites/default/files/favicon.png" type="image/png" />
-  <title>EOSC-DIH industry vouchers</title>
+  <title>EOSC DIH free trials</title>
   <style type="text/css" media="all">
 @import url("https://www.eosc-hub.eu/modules/system/system.base.css?phezzx");
 @import url("https://www.eosc-hub.eu/modules/system/system.menus.css?phezzx");
@@ -131,17 +131,17 @@
     <div class="row">
         <div class="col-md-12">
             <a id="main-content"></a>
-            <h1 class="title" id="page-title">Digital Innovation Hub Industry Vouchers</h1>
+            <h1 class="title" id="page-title">EOSC DIH Free Trial</h1>
             <div class="tabs">
             </div>
             <div id="block-block-41" class="block block-block">
                 <div class="content">
 
 
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    {% for message in messages %}
-       <div class="alert alert-danger" role="alert">
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">
        {{ message }}
       </div>
     {% endfor %}
@@ -153,6 +153,31 @@
 {% block body %}
 
 {% endblock %}
+
+<div></div>
+<h3>Supporting providers</h3>
+
+The EOSC DIH free trial grants access to the <a href="https://www.egi.eu/services/cloud-compute/">EGI Cloud Compute</a>
+service, supported by: 
+<div class="help-block"></div>
+
+<div class="row">
+    <div class="col-md-6 text-center">
+        <img src="https://www.egi.eu/wp-content/uploads/2016/08/recas_bari_logo-125x100.png" height="100" alt="RECAS-Bari" >
+    </div>
+    <div class="col-md-6 text-center">
+        <img height="90" src="https://www.egi.eu/wp-content/uploads/2016/08/cloud-provider-CESGA.jpg"  alt="CESGA">
+    </div>
+
+</div>
+
+
+
+
+<h3>Contact</h3>
+<p>
+Please contact us at <a href="mailto:eosc-dih-vouchers@mailman.eosc-hub.eu">eosc-dih-vouchers@mailman.eosc-hub.eu</a> for any questions regarding the free trial
+</p>
 
                 </div>
             </div>

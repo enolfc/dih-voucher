@@ -4,22 +4,49 @@
 
 <h2>Welcome {{ user.name }}</h2>
 
-<div class="text-center">
 
 {% if user.status == 'Active' %}
-    <h3>Your voucher is active!</h3>
-    <p>You have {{ user.valid_through.astimezone().replace(tzinfo=None) | humanize }} to consume the services
-    (your voucher will expire on  {{ user.valid_through.strftime('%Y-%m-%d')}}).</p>
-    <p>
-    <a class="btn brown-eosc" style="color:#fff;" href="https://dashboard.appdb.egi.eu/vmops">Access the dashboard</a>
-    </p>
+    <div class="text-center">
+        <h3>Your voucher is active!</h3>
+        <p>You have {{ user.valid_through.astimezone().replace(tzinfo=None) | humanize }} to consume the services
+            (your voucher will expire on  {{ user.valid_through.strftime('%Y-%m-%d')}}).</p>
+        <p>
+            <a class="btn brown-eosc" style="color:#fff;" href="https://dashboard.appdb.egi.eu/vmops">Access the dashboard</a>
+        </p>
+    </div>
+    <div>
+        {% if vo.site == 'recas-bari' %}
+        <p>Your free trial is supported by <a href="https://www.recas-bari.it/index.php/it/">RECAS-Bari</a></p>
+        {% else %}
+        <p>Your free trial is supported by <a href="https://www.cesga.es">CESGA</a></p>
+        {% endif %}
+        <p>The VMOps dashboard provides a Graphical User Interface (GUI) that allows to perform Virtual Machine (VM)
+           management operations on the EGI Cloud Compute service. Read about the dashboard at 
+           <a href="https://wiki.appdb.egi.eu/main:faq:what_is_the_vmops_dashboard">AppDB FAQ</a>.
+        </p>
+        <p>You may create up to 4 VMs at the providers using the predefined flavors. You may explore the full range
+        of providers, flavors and images available using the <a href="https://appdb.egi.eu/browse/cloud">
+            AppDB Cloud markeplact section</a>
+        {% if vo.site == 'recas-bari' %}
+        <div class="alert alert-warning">Note that only one public IP can be allocated to your VMs at RECAS-Bari, if you run more than 1 VM, use the one with public IP as bastion to access the other VMs deployed on the private network.</div>
+        {% endif %}
+    </div>
 {% elif user.status == 'Expired' %}
 
    <h3>Your voucher has expired!</h3> 
    <p>Please provide feedback at www.FIXME.com </p>
 {% else %}
-    <p>You may redeem your voucher by clicking below</p>
-    <a class="btn brown-eosc" style="color:#fff;" href="{{ url_for('enroll') }}">Get access!</a>
+
+<h3>How it works</h3>
+<ul>
+    <li>Once you click on the "Start your free trial!" button below you will be granted access to one of the providers</li>
+    <li>You will be redirected back to this page with the details to access the dashboard</li>
+    <li>First time accessing the dashboard will require to create a profile for the service</li>
+    <li>Your resources will be available for 90 days since the start of the trial</li>
+</ul>
+    <p class='text-center'>
+    <a class="btn brown-eosc" style="color:#fff;" href="{{ url_for('enroll') }}">Start your free trial!</a>
+    </p>
 {% endif %}
 
 </div>
